@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C4011B2125C965EC0090C5EA /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4011B2025C965EC0090C5EA /* PlaceModel.swift */; };
+		C4011B2825C97E320090C5EA /* NewPlaceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4011B2725C97E320090C5EA /* NewPlaceTableViewController.swift */; };
 		C421091225C937EF004D16C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C421091125C937EF004D16C9 /* AppDelegate.swift */; };
 		C421091425C937EF004D16C9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C421091325C937EF004D16C9 /* SceneDelegate.swift */; };
 		C421091925C937EF004D16C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C421091725C937EF004D16C9 /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		C4011B2025C965EC0090C5EA /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
+		C4011B2725C97E320090C5EA /* NewPlaceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaceTableViewController.swift; sourceTree = "<group>"; };
 		C421090E25C937EF004D16C9 /* MyFavoritePlaces.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFavoritePlaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C421091125C937EF004D16C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C421091325C937EF004D16C9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 				C421092725C93EDA004D16C9 /* MainTableViewController.swift */,
 				C421092A25C9518C004D16C9 /* CustomTableViewCell.swift */,
 				C4011B2025C965EC0090C5EA /* PlaceModel.swift */,
+				C4011B2725C97E320090C5EA /* NewPlaceTableViewController.swift */,
 				C421091725C937EF004D16C9 /* Main.storyboard */,
 				C421091A25C937F5004D16C9 /* Assets.xcassets */,
 				C421091C25C937F5004D16C9 /* LaunchScreen.storyboard */,
@@ -143,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4011B2825C97E320090C5EA /* NewPlaceTableViewController.swift in Sources */,
 				C421091225C937EF004D16C9 /* AppDelegate.swift in Sources */,
 				C421092825C93EDA004D16C9 /* MainTableViewController.swift in Sources */,
 				C4011B2125C965EC0090C5EA /* PlaceModel.swift in Sources */,
