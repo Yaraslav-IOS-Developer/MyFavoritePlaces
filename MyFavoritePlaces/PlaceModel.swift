@@ -5,19 +5,19 @@
 //  Created by Yaroslav on 2.02.21.
 //
 
-import UIKit
+import RealmSwift
 
 
-struct Place {
+class Place: Object {
     
-    var name: String
-    var location: String?
-    var type: String?
-    var image: UIImage?
-    var restaurantImage: String?
+    @objc var name = ""
+    @objc var location: String?
+    @objc var type: String?
+    @objc var imageData: Data?
     
     
-    static let restaurantName = [
+    
+    let restaurantName = [
         "Burger Heroes", "Kitchen", "Bonsai",
         "Дастархан", "Индокитай", "X.O", "Балкан Гриль",
         "Sherlock Holmes", "Speak Easy", "Morris Pub",
@@ -25,13 +25,23 @@ struct Place {
     ]
     
     
-   static func getPlaces() -> [Place] {
-        var places = [Place]()
+   func savePlaces() {
+        
         
         for place in restaurantName {
-            places.append(Place(name: place, location: "Минск", type: "Ресторан", restaurantImage: place))
+            let image = UIImage(named: place)
+            guard let imageData = image?.pngData() else { return }
+            
+            
+            let newPlace = Place()
+            newPlace.name = place
+            newPlace.location = "Minsk"
+            newPlace.type = "Restaurant"
+            newPlace.imageData = imageData
+            
+            StorageManager.saveObject(newPlace)
+            
         }
         
-        return places
     }
 }
