@@ -208,9 +208,12 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="DxM-1Q-42G">
                                 <rect key="frame" x="0.0" y="44" width="375" height="32"/>
                                 <segments>
-                                    <segment title="First"/>
-                                    <segment title="Second"/>
+                                    <segment title="Date"/>
+                                    <segment title="Name"/>
                                 </segments>
+                                <connections>
+                                    <action selector="sortSelection:" destination="jEO-SX-NdO" eventType="valueChanged" id="eGd-Og-1Q0"/>
+                                </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="1ft-x9-zMf">
                                 <rect key="frame" x="0.0" y="76" width="375" height="591"/>
@@ -223,7 +226,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="348" height="85"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YBj-7c-Ymf">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imagePlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="YBj-7c-Ymf">
                                                     <rect key="frame" x="15" y="10" width="65" height="65"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="65" id="9Ej-tp-5fy"/>
@@ -291,7 +294,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="My Favorite Places" largeTitleDisplayMode="never" id="ghG-6z-Qt5">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="AZ" id="Jdv-1T-n02"/>
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="AZ" id="Jdv-1T-n02">
+                            <connections>
+                                <action selector="reversedSorting:" destination="jEO-SX-NdO" id="Gml-f5-Iw2"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="OHj-yH-xiM">
                             <connections>
                                 <segue destination="Lop-8T-cGa" kind="presentation" id="axc-4D-v1H"/>
@@ -299,6 +306,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="reversedSortingButton" destination="Jdv-1T-n02" id="zN1-HF-1NF"/>
+                        <outlet property="segmentedControl" destination="DxM-1Q-42G" id="GiA-3m-Uhn"/>
                         <outlet property="tableView" destination="1ft-x9-zMf" id="U95-XR-9Ye"/>
                     </connections>
                 </viewController>
@@ -331,6 +340,7 @@
     <resources>
         <image name="AZ" width="25" height="24"/>
         <image name="Photo" width="195" height="196"/>
+        <image name="imagePlaceholder" width="170" height="170"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

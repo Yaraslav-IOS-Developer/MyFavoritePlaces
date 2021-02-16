@@ -68,11 +68,13 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
 
         var image: UIImage?
         
+        
         if imageIsChanged {
             image = placeImage.image
         } else {
             image = #imageLiteral(resourceName: "imagePlaceholder")
         }
+        
         let imageData = image?.pngData()
         
         let newPlace = Place(name: placeName.text!, location: placeLocation.text, type: placeType.text, imageData: imageData)
