@@ -83,13 +83,13 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
+
+   func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+
         let place = places[indexPath.row]
         let deletAction = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in
-            
-            StorageManager.deletObject(place)
+
+           StorageManager.deletObject(place)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
         return [deletAction]

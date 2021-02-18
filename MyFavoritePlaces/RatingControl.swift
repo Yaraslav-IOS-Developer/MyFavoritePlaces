@@ -11,7 +11,11 @@ import UIKit
     
    
     // MARK: Properties
-    var rating = 0
+    var rating = 0 {
+        didSet {
+            updateButtonSelectionState()
+        }
+    }
     private var ratingButtons = [UIButton]()
     @IBInspectable var starSize: CGSize = CGSize(width: 44.0, height: 44.0) {
         didSet {
@@ -39,7 +43,17 @@ import UIKit
     // MARK: Button action
     
     @objc func ratingButtonTappe(button: UIButton) {
-        print("Button pressed")
+        guard let index = ratingButtons.firstIndex(of: button) else { return }
+        
+        // Calculate the rating of the selected button
+        
+        let selectedRating = index + 1
+        
+        if selectedRating == rating {
+            rating = 0
+        } else {
+            rating = selectedRating
+        }
     }
     
     // MARK: Private methods
@@ -52,10 +66,32 @@ import UIKit
         }
         ratingButtons.removeAll()
         
+        // Load button image
+        let bundle = Bundle(for:  type(of: self))
+        
+        let filledStar = UIImage(named: "filledStar",
+                                 in: bundle,
+                                 compatibleWith: self.traitCollection)
+        
+        let emptyStar = UIImage(named: "emptyStar",
+                                in: bundle,
+                                compatibleWith: self.traitCollection)
+        
+        let highlightedStar = UIImage(named: "highlightedStar",
+                                      in: bundle,
+                                      compatibleWith: self.traitCollection)
+        
+        
+        
         for _ in  1...starCount {
             // Create the button
             let button = UIButton()
-            button.backgroundColor = .red
+        
+            // Set the button image
+            button.setImage(emptyStar, for: .normal)
+            button.setImage(filledStar, for: .selected)
+            button.setImage(highlightedStar, for: .highlighted)
+            button.setImage(highlightedStar, for: [.highlighted, .selected])
             
             //Add constraints
             button.translatesAutoresizingMaskIntoConstraints = false
@@ -71,6 +107,13 @@ import UIKit
             // Add the new button on the rating Button array
             
             ratingButtons.append(button)
+        }
+        updateButtonSelectionState()
+    }
+    
+    private func updateButtonSelectionState() {
+        for (index, button) in ratingButtons.enumerated() {
+            button.isSelected = index < rating
         }
     }
 
