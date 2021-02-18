@@ -11,14 +11,14 @@ import RealmSwift
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    let schemaVersion: UInt64 = 2
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         let config = Realm.Configuration(
-            schemaVersion: 1, // Set the new schema version.
+            schemaVersion: schemaVersion, // Set the new schema version.
             migrationBlock: { migration, oldSchemaVersion in
-                if oldSchemaVersion < 1 {
+                if oldSchemaVersion < self.schemaVersion {
                     // The enumerateObjects(ofType:_:) method iterates over
                     // every Person object stored in the Realm file
                     
