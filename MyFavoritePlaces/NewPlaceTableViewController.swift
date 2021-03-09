@@ -14,6 +14,7 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
     
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    
     @IBOutlet weak var placeImage: UIImageView!
     @IBOutlet weak var placeName: UITextField!
     @IBOutlet weak var placeLocation: UITextField!

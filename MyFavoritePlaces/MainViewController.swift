@@ -39,41 +39,34 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         searchController.searchBar.placeholder = "Search"
         navigationItem.searchController = searchController
         definesPresentationContext = true
-
+        
         
     }
-
+    
     // MARK: - Table view data source
-
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if isFiltering {
             return filtreredPlaces.count
         } else {
-            return places.isEmpty ? 0 : places.count
+            return places.count
         }
     }
     
     
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! CustomTableViewCell
         
-        var place = Place()
-        
-        if isFiltering {
-            place = filtreredPlaces[indexPath.row]
-        } else {
-            place = places[indexPath.row]
-        }
+        let place = isFiltering ? filtreredPlaces[indexPath.row] : places[indexPath.row]
         
         cell.nameLabel.text = place.name
         cell.locationLabel.text = place.location
         cell.typeLabel.text = place.type
         
         cell.imageOfPlace.image = UIImage(data: place.imageData!)
+        cell.cosmosView.rating = place.rating
         
-        cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2
-        cell.imageOfPlace.clipsToBounds = true
         
         return cell
     }
@@ -83,30 +76,28 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
-   func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-
+    
+    private func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UIContextualAction]? {
+        
         let place = places[indexPath.row]
-        let deletAction = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in
-
-           StorageManager.deletObject(place)
+        let deletAction = UIContextualAction(style: .normal, title: "Delete") { (_, _, _) in
+            StorageManager.deletObject(place)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
+        
         return [deletAction]
     }
-     // MARK: - Navigation
-
-     
+    
+    
+    // MARK: - Navigation
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "swoDetails" {
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            let place: Place
-            if isFiltering {
-                place = filtreredPlaces[indexPath.row]
-            } else {
-                place = places[indexPath.row]
-            }
+            let place = isFiltering ? filtreredPlaces[indexPath.row] : places[indexPath.row]
+            
             let newPlaceVC = segue.destination as! NewPlaceTableViewController
             newPlaceVC.currentPlace = place
         }
@@ -144,7 +135,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     private func sorting() {
         
         if segmentedControl.selectedSegmentIndex == 0 {
-          places = places.sorted(byKeyPath: "date", ascending: ascendingSorting)
+            places = places.sorted(byKeyPath: "date", ascending: ascendingSorting)
         } else {
             places = places.sorted(byKeyPath: "name", ascending: ascendingSorting)
         }
@@ -154,6 +145,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
 }
 extension MainViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        
         filterContentForSearchText(searchController.searchBar.text!)
     }
     
