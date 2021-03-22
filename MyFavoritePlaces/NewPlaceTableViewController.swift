@@ -10,11 +10,9 @@ import UIKit
 class NewPlaceTableViewController: UITableViewController, UINavigationControllerDelegate {
     
     var currentPlace: Place!
-    var imageIsChanged = false
-    
+    private var imageIsChanged = false
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    
     @IBOutlet weak var placeImage: UIImageView!
     @IBOutlet weak var placeName: UITextField!
     @IBOutlet weak var placeLocation: UITextField!
@@ -23,29 +21,26 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
         saveButton.isEnabled = false
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         setupEditScreen()
-        
     }
     
     // MARK: - Table view delegate
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.row == 0 {
             let cameraIcon = #imageLiteral(resourceName: "camera")
             let photoIcon = #imageLiteral(resourceName: "photo")
             let actioSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            
             let camera = UIAlertAction(title: "Camera", style: .default) { _ in
                 self.chooseImagePicker(source: .camera)
-            
             }
+            
             camera.setValue(cameraIcon, forKey: "image")
             camera.setValue(CATextLayerAlignmentMode.left, forKey: "titleTextAlignment")
-            
             
             let foto = UIAlertAction(title: "Foto", style: .default) { _ in
                 self.chooseImagePicker(source: .photoLibrary)
@@ -67,12 +62,8 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
     }
     
     func savePlace() {
-
         let image = imageIsChanged ? placeImage.image : #imageLiteral(resourceName: "imagePlaceholder")
-        
-        
         let imageData = image?.pngData()
-        
         let newPlace = Place(name: placeName.text!, location: placeLocation.text, type: placeType.text, imageData: imageData, rating: Double(ratingControl.rating))
         
         if currentPlace != nil {
@@ -83,17 +74,16 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
                 currentPlace?.imageData = newPlace.imageData
                 currentPlace?.rating = newPlace.rating
             }
-            
         } else {
             StorageManager.saveObject(newPlace)
         }
-        
-      
     }
+    
     private func setupEditScreen() {
-        imageIsChanged  = true
+        
         if currentPlace != nil {
             setupNavigationBar()
+            imageIsChanged  = true
             guard let data = currentPlace?.imageData, let image = UIImage(data: data) else { return }
             
             placeImage.image = image
@@ -104,27 +94,20 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
             ratingControl.rating = Int(currentPlace.rating)
         }
     }
-    
     private func setupNavigationBar() {
-        
         if let topItem = navigationController?.navigationBar.topItem {
             topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         }
         navigationItem.leftBarButtonItem = nil
         title = currentPlace?.name
         saveButton.isEnabled = true
-        
     }
-    
     @IBAction func cancelAction(_ sender: Any) {
         dismiss(animated: true)
     }
-    
-    
 }
 
 // MARK:- Text field delegate
-
 extension NewPlaceTableViewController: UITextFieldDelegate {
     
     // Скрываем клавиатуру по нажатию на Done
@@ -134,7 +117,6 @@ extension NewPlaceTableViewController: UITextFieldDelegate {
     }
     
     @objc private func textFieldChanged() {
-        
         if placeName.text?.isEmpty == false {
             saveButton.isEnabled = true
         } else {
@@ -145,11 +127,9 @@ extension NewPlaceTableViewController: UITextFieldDelegate {
 }
 
 // MARK: - Work with image
-
 extension NewPlaceTableViewController: UIImagePickerControllerDelegate {
     
     func chooseImagePicker(source: UIImagePickerController.SourceType) {
-        
         if UIImagePickerController.isSourceTypeAvailable(source) {
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self

@@ -9,8 +9,7 @@ import UIKit
 
 @IBDesignable class RatingControl: UIStackView {
     
-   
-    // MARK: Properties
+    // MARK:- Properties
     var rating = 0 {
         didSet {
             updateButtonSelectionState()
@@ -27,10 +26,7 @@ import UIKit
             setupButtons()
         }
     }
-    
-
-    // MARK: Initialization
-    
+    // MARK:- Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupButtons()
@@ -40,15 +36,12 @@ import UIKit
         setupButtons()
     }
     
-    // MARK: Button action
-    
+    // MARK:- Button action
     @objc func ratingButtonTappe(button: UIButton) {
         guard let index = ratingButtons.firstIndex(of: button) else { return }
         
         // Calculate the rating of the selected button
-        
         let selectedRating = index + 1
-        
         if selectedRating == rating {
             rating = 0
         } else {
@@ -56,8 +49,7 @@ import UIKit
         }
     }
     
-    // MARK: Private methods
-    
+    // MARK:- Private methods
     private func setupButtons() {
         
         for button in ratingButtons {
@@ -80,13 +72,10 @@ import UIKit
         let highlightedStar = UIImage(named: "highlightedStar",
                                       in: bundle,
                                       compatibleWith: self.traitCollection)
-        
-        
-        
         for _ in  1...starCount {
             // Create the button
             let button = UIButton()
-        
+            
             // Set the button image
             button.setImage(emptyStar, for: .normal)
             button.setImage(filledStar, for: .selected)
@@ -105,7 +94,6 @@ import UIKit
             addArrangedSubview(button)
             
             // Add the new button on the rating Button array
-            
             ratingButtons.append(button)
         }
         updateButtonSelectionState()
@@ -116,5 +104,5 @@ import UIKit
             button.isSelected = index < rating
         }
     }
-
+    
 }
