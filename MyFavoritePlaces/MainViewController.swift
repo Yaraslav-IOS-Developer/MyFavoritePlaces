@@ -74,16 +74,17 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let place = places[indexPath.row]
-        let deletAction = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in
-            
+        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") {  (contextualAction, view, boolValue) in
+
             StorageManager.deletObject(place)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
-        
-        return [deletAction]
+        let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction])
+
+        return swipeActions
     }
     
     
@@ -145,7 +146,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
 extension MainViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
-
+        
         filterContentForSearchText(searchController.searchBar.text!)
     }
     

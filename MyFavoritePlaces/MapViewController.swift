@@ -9,38 +9,65 @@ import UIKit
 import MapKit
 import CoreLocation
 
+
+protocol MapViewControllerDelegate {
+    func getAddress(_ address: String?)
+}
+
+
 class MapViewController: UIViewController {
     
+    var mapViewControllerDelegate: MapViewControllerDelegate?
     var place = Place()
     private let annotationIdentifier = "annotationIdentifier"
     private let locationManager = CLLocationManager()
-    private let regionInMeters = 10_000.00
+    private let regionInMeters = 500.00
+    var icomeSegueIdentifier = ""
     
     
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapPinImage: UIImageView!
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var doneButton: UIButton!
+    
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        setupPlacemark()
+        setupMapView()
         checkLocationServices()
         
     }
+        
     
     @IBAction func centerViewInUserLocation() {
-        if let location = locationManager.location?.coordinate {
-            let region = MKCoordinateRegion(center: location,
-                                            latitudinalMeters: regionInMeters,
-                                            longitudinalMeters: regionInMeters)
-            mapView.setRegion(region, animated: true)
-        }
-        
+        showUserLoaction()
     }
+    
     @IBAction func closeViewController() {
         dismiss(animated: true)
     }
     
+    @IBAction func doneButtonPress(_ sender: Any) {
+        
+        mapViewControllerDelegate?.getAddress(addressLabel.text)
+        dismiss(animated: true)
+    }
+    
+    
+    
+    private func setupMapView() {
+        
+        if icomeSegueIdentifier == "showPlace" {
+            setupPlacemark()
+            mapPinImage.isHidden = true
+            addressLabel.isHidden = true
+            doneButton.isHidden = true
+        }
+    
+    }
     
     private func setupPlacemark() {
         guard let location = place.location else { return }
@@ -89,6 +116,7 @@ class MapViewController: UIViewController {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse:
             mapView.showsUserLocation = true
+            if icomeSegueIdentifier == "getAddress" { showUserLoaction() }
             break
         case .denied:
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -109,6 +137,24 @@ class MapViewController: UIViewController {
         @unknown default:
             break
         }
+    }
+    
+    
+    private func showUserLoaction() {
+        if let location = locationManager.location?.coordinate {
+            let region = MKCoordinateRegion(center: location,
+                                            latitudinalMeters: regionInMeters,
+                                            longitudinalMeters: regionInMeters)
+            mapView.setRegion(region, animated: true)
+        }
+    }
+    
+    
+    private func getCentrLocation(for mapView: MKMapView) -> CLLocation {
+        let latitude = mapView.centerCoordinate.latitude
+        let longitude = mapView.centerCoordinate.longitude
+        
+        return CLLocation(latitude: latitude, longitude: longitude)
     }
     
     private func showAlert(title: String, message: String) {
@@ -142,6 +188,38 @@ extension MapViewController: MKMapViewDelegate {
             annotationView?.rightCalloutAccessoryView = imageView
         }
         return annotationView
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        
+        let center = getCentrLocation(for: mapView)
+        let geocoder = CLGeocoder()
+        
+        geocoder.reverseGeocodeLocation(center) { (placemark, error) in
+            if let error = error {
+                print(error)
+                return
+            }
+            guard let placemarks = placemark else { return }
+            
+            let placemark = placemarks.first
+            let streetName = placemark?.thoroughfare
+            let buildNumber = placemark?.subThoroughfare
+            
+            
+            DispatchQueue.main.async {
+                
+                if streetName != nil && buildNumber != nil {
+                    self.addressLabel.text = "\(streetName!),\(buildNumber!)"
+                } else if streetName != nil {
+                    self.addressLabel.text = "\(streetName!)"
+                } else {
+                    self.addressLabel.text = "No adreess"
+                }
+                
+            }
+            
+        }
     }
 }
 extension MapViewController: CLLocationManagerDelegate {

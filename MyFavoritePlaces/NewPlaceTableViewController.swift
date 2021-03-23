@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Cosmos
 
 class NewPlaceTableViewController: UITableViewController, UINavigationControllerDelegate {
     
@@ -17,7 +18,7 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
     @IBOutlet weak var placeName: UITextField!
     @IBOutlet weak var placeLocation: UITextField!
     @IBOutlet weak var placeType: UITextField!
-    @IBOutlet weak var ratingControl: RatingControl!
+    @IBOutlet weak var ratingControlCosmosView: CosmosView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +65,7 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
     func savePlace() {
         let image = imageIsChanged ? placeImage.image : #imageLiteral(resourceName: "imagePlaceholder")
         let imageData = image?.pngData()
-        let newPlace = Place(name: placeName.text!, location: placeLocation.text, type: placeType.text, imageData: imageData, rating: Double(ratingControl.rating))
+        let newPlace = Place(name: placeName.text!, location: placeLocation.text, type: placeType.text, imageData: imageData, rating: Double(ratingControlCosmosView.rating))
         
         if currentPlace != nil {
             try! realm.write {
@@ -91,7 +92,7 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
             placeName.text = currentPlace?.name
             placeLocation.text = currentPlace?.location
             placeType.text = currentPlace?.type
-            ratingControl.rating = Int(currentPlace.rating)
+            ratingControlCosmosView.rating = Double(Int(currentPlace.rating))
         }
     }
     private func setupNavigationBar() {
@@ -152,12 +153,28 @@ extension NewPlaceTableViewController: UIImagePickerControllerDelegate {
 extension NewPlaceTableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier != "showMap" { return }
-        let mapVC = segue.destination as! MapViewController
-        mapVC.place.name = placeName.text!
-        mapVC.place.location = placeLocation.text
-        mapVC.place.type = placeType.text
-        mapVC.place.imageData = placeImage.image?.pngData()
+        
+        guard
+            let identifier = segue.identifier,
+            let mapViewController = segue.destination as? MapViewController
+            else { return }
+        
+        mapViewController.icomeSegueIdentifier = identifier
+        mapViewController.mapViewControllerDelegate = self
+        
+        if identifier == "showePlace" {
+            mapViewController.place.name = placeName.text!
+            mapViewController.place.location = placeLocation.text
+            mapViewController.place.type = placeType.text
+            mapViewController.place.imageData = placeImage.image?.pngData()
+        }
     }
+    
+}
+extension NewPlaceTableViewController:MapViewControllerDelegate {
+    func getAddress(_ address: String?) {
+        placeLocation.text = address
+    }
+    
     
 }
