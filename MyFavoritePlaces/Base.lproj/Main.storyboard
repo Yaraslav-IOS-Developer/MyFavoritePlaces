@@ -301,7 +301,21 @@
                                     <color key="titleColor" systemColor="labelColor"/>
                                 </state>
                                 <connections>
-                                    <action selector="doneButtonPress:" destination="CE6-6x-mIr" eventType="touchUpInside" id="u8w-8Z-wqk"/>
+                                    <action selector="doneButtonPressed:" destination="CE6-6x-mIr" eventType="touchUpInside" id="u8w-8Z-wqk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KZ2-Mj-qkH">
+                                <rect key="frame" x="162.66666666666666" y="679" width="65" height="47"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="65" id="3CE-b7-EAV"/>
+                                    <constraint firstAttribute="height" constant="47" id="peY-mM-S9s"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="30"/>
+                                <state key="normal" title="Start">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="startButtonPressed" destination="CE6-6x-mIr" eventType="touchUpInside" id="ugL-7e-27O"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -309,9 +323,11 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="OiQ-Ct-6Fg" firstAttribute="centerX" secondItem="xx9-Vp-soZ" secondAttribute="centerX" id="1sz-Vp-1tk"/>
+                            <constraint firstItem="krC-uV-v1z" firstAttribute="bottom" secondItem="KZ2-Mj-qkH" secondAttribute="bottom" constant="30" id="57z-RC-nD2"/>
                             <constraint firstItem="mDn-1h-ReW" firstAttribute="leading" secondItem="krC-uV-v1z" secondAttribute="leading" constant="15" id="5xu-hy-uUh"/>
                             <constraint firstItem="LHX-DB-C6Q" firstAttribute="top" secondItem="mDn-1h-ReW" secondAttribute="bottom" constant="-219" id="AKk-HK-exm"/>
                             <constraint firstItem="LHX-DB-C6Q" firstAttribute="leading" secondItem="krC-uV-v1z" secondAttribute="leading" id="Ajx-2a-UGf"/>
+                            <constraint firstItem="KZ2-Mj-qkH" firstAttribute="centerX" secondItem="xx9-Vp-soZ" secondAttribute="centerX" id="H2o-lh-G18"/>
                             <constraint firstItem="h6b-zi-hrF" firstAttribute="top" secondItem="krC-uV-v1z" secondAttribute="top" constant="40" id="NE0-bn-qZ8"/>
                             <constraint firstItem="LHX-DB-C6Q" firstAttribute="trailing" secondItem="krC-uV-v1z" secondAttribute="trailing" id="aqz-JO-lyq"/>
                             <constraint firstItem="LHX-DB-C6Q" firstAttribute="top" secondItem="xx9-Vp-soZ" secondAttribute="top" id="byq-cu-JkR"/>
@@ -331,6 +347,7 @@
                         <outlet property="doneButton" destination="3Ng-wl-iNO" id="nzC-2D-pF3"/>
                         <outlet property="mapPinImage" destination="OiQ-Ct-6Fg" id="pDL-hT-67k"/>
                         <outlet property="mapView" destination="LHX-DB-C6Q" id="w2p-0z-TxE"/>
+                        <outlet property="startButton" destination="KZ2-Mj-qkH" id="oQV-nq-u4Z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZkA-96-s50" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
