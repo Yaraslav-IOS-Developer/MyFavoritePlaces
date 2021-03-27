@@ -10,9 +10,11 @@ import Cosmos
 
 class NewPlaceTableViewController: UITableViewController, UINavigationControllerDelegate {
     
+    // MARK: - Property
     var currentPlace: Place!
     private var imageIsChanged = false
     
+    //MARK: - IBOutlet
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var placeImage: UIImageView!
     @IBOutlet weak var placeName: UITextField!
@@ -20,6 +22,7 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
     @IBOutlet weak var placeType: UITextField!
     @IBOutlet weak var ratingControlCosmosView: CosmosView!
     
+    // MARK:- vieDidload
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,6 +65,7 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
         }
     }
     
+    //MARK:- methods
     func savePlace() {
         let image = imageIsChanged ? placeImage.image : #imageLiteral(resourceName: "imagePlaceholder")
         let imageData = image?.pngData()
@@ -103,6 +107,8 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
         title = currentPlace?.name
         saveButton.isEnabled = true
     }
+    
+    // MARK:- IBAction
     @IBAction func cancelAction(_ sender: Any) {
         dismiss(animated: true)
     }
@@ -157,7 +163,7 @@ extension NewPlaceTableViewController {
         guard
             let identifier = segue.identifier,
             let mapViewController = segue.destination as? MapViewController
-            else { return }
+        else { return }
         
         mapViewController.icomeSegueIdentifier = identifier
         mapViewController.mapViewControllerDelegate = self
@@ -171,6 +177,8 @@ extension NewPlaceTableViewController {
     }
     
 }
+
+// MARK:- extension MapViewControllerDelegate
 extension NewPlaceTableViewController:MapViewControllerDelegate {
     func getAddress(_ address: String?) {
         placeLocation.text = address

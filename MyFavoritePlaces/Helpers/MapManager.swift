@@ -12,17 +12,17 @@ import MapKit
 
 class MapManager {
     
-    
     // MARK: - Property 
     let locationManager = CLLocationManager()
-    private let regionInMeters = 500.00
-    private var  directionArray: [MKDirections] = []
+    
     private var placeCoordinate: CLLocationCoordinate2D?
-    
-    
+    private var  directionArray: [MKDirections] = []
+    private let regionInMeters = 500.00
     
     // MARK: - Methods
+    // Маркер заведения
     func setupPlacemark(place: Place, mapView: MKMapView) {
+        
         guard let location = place.location else { return }
         
         let geocoder = CLGeocoder()
@@ -87,13 +87,12 @@ class MapManager {
             break
         case .authorizedAlways:
             break
-            
         @unknown default:
-            break
+            print("New case is available")
         }
     }
     
-    // Фокус карты на мемтоположение пользователя
+    // Фокус карты на местоположение пользователя
     func showUserLoaction(mapView: MKMapView) {
         if let location = locationManager.location?.coordinate {
             let region = MKCoordinateRegion(center: location,
@@ -187,7 +186,7 @@ class MapManager {
         return CLLocation(latitude: latitude, longitude: longitude)
     }
     
-    func showAlert(title: String, message: String) {
+    private func showAlert(title: String, message: String) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default)

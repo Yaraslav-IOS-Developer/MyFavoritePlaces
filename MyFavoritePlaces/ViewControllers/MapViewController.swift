@@ -91,11 +91,8 @@ class MapViewController: UIViewController {
             addressLabel.isHidden = true
             doneButton.isHidden = true
             startButton.isHidden = false
-            
         }
-        
     }
-    
 }
 // MARK: - MKMapViewDelegate
 extension MapViewController: MKMapViewDelegate {

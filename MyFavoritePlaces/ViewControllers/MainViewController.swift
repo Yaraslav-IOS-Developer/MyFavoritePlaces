@@ -10,6 +10,7 @@ import RealmSwift
 
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    // MARK:- Property
     private let searchController = UISearchController(searchResultsController: nil)
     private var places:  Results<Place>!
     private var filtreredPlaces: Results<Place>!
@@ -22,29 +23,21 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         return searchController.isActive && !searchBarIsEmpty
     }
     
+    // MARK: - IBOutlet
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var reversedSortingButton: UIBarButtonItem!
     
+    // MARK: - viewDidload
     override func viewDidLoad() {
         super.viewDidLoad()
         
         places = realm.objects(Place.self)
-        
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
-        
-        // Setup the search controller
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search"
-        navigationItem.searchController = searchController
-        definesPresentationContext = true
-        
-        
+        setupSearchController()
     }
     
     // MARK: - Table view data source
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFiltering {
             return filtreredPlaces.count
@@ -56,40 +49,31 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! CustomTableViewCell
         
-        let place = isFiltering ? filtreredPlaces[indexPath.row] : places[indexPath.row]
-        
-        cell.nameLabel.text = place.name
-        cell.locationLabel.text = place.location
-        cell.typeLabel.text = place.type
-        cell.imageOfPlace.image = UIImage(data: place.imageData!)
-        cell.cosmosView.rating = place.rating
-        
-        
+        _ = isFiltering ? filtreredPlaces[indexPath.row] : places[indexPath.row]
+        cell.configureCell(places[indexPath.row])
         return cell
     }
     
     // MARK: - Table view delegate
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let place = places[indexPath.row]
         let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") {  (contextualAction, view, boolValue) in
-
+            
             StorageManager.deletObject(place)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
         let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction])
-
+        
         return swipeActions
     }
     
     
     // MARK: - Navigation
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "swoDetails" {
@@ -101,22 +85,18 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    
+    // MARK: - IBAction
     @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {
         
         guard let newPlaceVC = segue.source as? NewPlaceTableViewController else { return }
         
         newPlaceVC.savePlace()
         tableView.reloadData()
-        
     }
-    
     
     @IBAction func sortSelection(_ sender: UISegmentedControl) {
-        
         sorting()
     }
-    
     @IBAction func reversedSorting(_ sender: Any) {
         
         ascendingSorting.toggle()
@@ -130,6 +110,15 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         sorting()
     }
     
+    // MARK: - private method
+    private func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+    
     private func sorting() {
         
         if segmentedControl.selectedSegmentIndex == 0 {
@@ -140,21 +129,19 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         tableView.reloadData()
     }
-    
 }
-
+// MARK: - extension UISearchResultsUpdating
 extension MainViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         
         filterContentForSearchText(searchController.searchBar.text!)
     }
-    
+
     private func filterContentForSearchText(_ searchText: String) {
         
         filtreredPlaces = places.filter("name CONTAINS[c] %@  OR location CONTAINS[c] %@", searchText, searchText)
         
         tableView.reloadData()
     }
-    
 }

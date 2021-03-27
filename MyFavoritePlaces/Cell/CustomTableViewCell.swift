@@ -25,5 +25,13 @@ class CustomTableViewCell: UITableViewCell {
         }
     }
     
+        func configureCell(_ place: Place) {
+        nameLabel.text = place.name
+        locationLabel.text = place.location
+        typeLabel.text = place.type
+        imageOfPlace.image = UIImage(data: place.imageData!)
+        cosmosView.rating = place.rating
+        
+    }
 
 }
