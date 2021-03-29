@@ -20,8 +20,6 @@
 		C4274AAB25D57A4E00C8FA07 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4274AAA25D57A4E00C8FA07 /* StorageManager.swift */; };
 		C49AF861260B83FC00D5B2FE /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49AF860260B83FC00D5B2FE /* MapManager.swift */; };
 		C4A3C11D25F936BE008BE0F1 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A3C11C25F936BE008BE0F1 /* MapViewController.swift */; };
-		C4F3EC0B260F208F0044C94D /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3EC09260F208F0044C94D /* CustomTableViewCell.swift */; };
-		C4F3EC0C260F208F0044C94D /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4F3EC0A260F208F0044C94D /* CustomTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,8 +40,6 @@
 		C4274AAA25D57A4E00C8FA07 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		C49AF860260B83FC00D5B2FE /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 		C4A3C11C25F936BE008BE0F1 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		C4F3EC09260F208F0044C94D /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
-		C4F3EC0A260F208F0044C94D /* CustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +83,6 @@
 		C421091025C937EF004D16C9 /* MyFavoritePlaces */ = {
 			isa = PBXGroup;
 			children = (
-				C4F3EC08260F1FC60044C94D /* Xib */,
 				C49AF863260B936B00D5B2FE /* ViewControllers */,
 				C49AF866260B93EC00D5B2FE /* Helpers */,
 				C49AF865260B93D200D5B2FE /* Models */,
@@ -151,15 +146,6 @@
 				C421091C25C937F5004D16C9 /* LaunchScreen.storyboard */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		C4F3EC08260F1FC60044C94D /* Xib */ = {
-			isa = PBXGroup;
-			children = (
-				C4F3EC09260F208F0044C94D /* CustomTableViewCell.swift */,
-				C4F3EC0A260F208F0044C94D /* CustomTableViewCell.xib */,
-			);
-			path = Xib;
 			sourceTree = "<group>";
 		};
 		D416F421BEC02E8702DF9083 /* Pods */ = {
@@ -232,7 +218,6 @@
 			files = (
 				C421091E25C937F5004D16C9 /* LaunchScreen.storyboard in Resources */,
 				C421091B25C937F5004D16C9 /* Assets.xcassets in Resources */,
-				C4F3EC0C260F208F0044C94D /* CustomTableViewCell.xib in Resources */,
 				C421091925C937EF004D16C9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -292,7 +277,6 @@
 				C4A3C11D25F936BE008BE0F1 /* MapViewController.swift in Sources */,
 				C49AF861260B83FC00D5B2FE /* MapManager.swift in Sources */,
 				C4274AAB25D57A4E00C8FA07 /* StorageManager.swift in Sources */,
-				C4F3EC0B260F208F0044C94D /* CustomTableViewCell.swift in Sources */,
 				C4011B2125C965EC0090C5EA /* PlaceModel.swift in Sources */,
 				C421092B25C9518C004D16C9 /* CustomTableViewCell.swift in Sources */,
 				C421091425C937EF004D16C9 /* SceneDelegate.swift in Sources */,

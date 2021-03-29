@@ -33,6 +33,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         
         places = realm.objects(Place.self)
+        tableView.separatorColor = .clear
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
         setupSearchController()
     }

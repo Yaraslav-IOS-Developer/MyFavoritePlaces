@@ -10,6 +10,9 @@ import Cosmos
 
 class CustomTableViewCell: UITableViewCell {
     
+    
+    
+    @IBOutlet weak var topView: UIView!
     @IBOutlet weak var imageOfPlace: UIImageView! {
         didSet {
             imageOfPlace.layer.cornerRadius = imageOfPlace.frame.size.height / 2
@@ -24,6 +27,15 @@ class CustomTableViewCell: UITableViewCell {
             cosmosView.settings.updateOnTouch = false
         }
     }
+    
+    override func awakeFromNib() {
+            super.awakeFromNib()
+        topView.layer.cornerRadius = 20
+        topView.layer.masksToBounds = true
+        //contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        }
+    
+    
     
         func configureCell(_ place: Place) {
         nameLabel.text = place.name
