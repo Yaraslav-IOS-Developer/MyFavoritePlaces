@@ -10,15 +10,10 @@ import Cosmos
 
 class CustomTableViewCell: UITableViewCell {
     
-    
-    
+    //MARK: - IBOutlet
     @IBOutlet weak var topView: UIView!
-    @IBOutlet weak var imageOfPlace: UIImageView! {
-        didSet {
-            imageOfPlace.layer.cornerRadius = imageOfPlace.frame.size.height / 2
-            imageOfPlace.clipsToBounds = true
-        }
-    }
+    @IBOutlet weak var imageOfPlace: UIImageView!
+    @IBOutlet weak var shadowImageOfPlaceView: UIView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var typeLabel: UILabel!
@@ -29,15 +24,38 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     override func awakeFromNib() {
-            super.awakeFromNib()
+        super.awakeFromNib()
+        
+        setupTopView()
+        setupImageOfPlace()
+    }
+    
+
+    // MARK: - Methods
+    private func setupImageOfPlace() {
+        
+        imageOfPlace.layer.cornerRadius = imageOfPlace.frame.size.height / 2
+        shadowImageOfPlaceView.layer.cornerRadius = imageOfPlace.frame.size.height / 2
+        
+        addShadow(view: shadowImageOfPlaceView, opacity: 0.8, x: 2, y: 3, radius: 6)
+    
+    }
+    
+    private func setupTopView() {
+        
         topView.layer.cornerRadius = 20
-        topView.layer.masksToBounds = true
-        //contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
-        }
+        addShadow(view: topView, opacity: 0.4, x: 2, y: 3, radius: 4)
+    }
+    
+    private func addShadow(view: UIView, opacity: Float, x: Int, y: Int, radius: CGFloat) {
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = opacity
+        view.layer.shadowOffset = CGSize(width: x, height: y)
+        view.layer.shadowRadius = radius
+    }
     
     
-    
-        func configureCell(_ place: Place) {
+    func configureCell(_ place: Place) {
         nameLabel.text = place.name
         locationLabel.text = place.location
         typeLabel.text = place.type
@@ -45,5 +63,5 @@ class CustomTableViewCell: UITableViewCell {
         cosmosView.rating = place.rating
         
     }
-
+    
 }
