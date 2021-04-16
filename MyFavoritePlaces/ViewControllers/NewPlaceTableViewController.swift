@@ -96,7 +96,7 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
             placeName.text = currentPlace?.name
             placeLocation.text = currentPlace?.location
             placeType.text = currentPlace?.type
-            ratingControlCosmosView.rating = Double(Int(currentPlace.rating))
+            ratingControlCosmosView.rating = Double(currentPlace.rating)
         }
     }
     private func setupNavigationBar() {
@@ -157,29 +157,28 @@ extension NewPlaceTableViewController: UIImagePickerControllerDelegate {
 
 // MARK: - Navigation
 extension NewPlaceTableViewController {
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         guard
             let identifier = segue.identifier,
-            let mapViewController = segue.destination as? MapViewController
-        else { return }
+            let mapVC = segue.destination as? MapViewController
+            else { return }
         
-        mapViewController.icomeSegueIdentifier = identifier
-        mapViewController.mapViewControllerDelegate = self
+        mapVC.incomeSegueIdentifier = identifier
+        mapVC.mapViewControllerDelegate = self
         
-        if identifier == "showePlace" {
-            mapViewController.place.name = placeName.text!
-            mapViewController.place.location = placeLocation.text
-            mapViewController.place.type = placeType.text
-            mapViewController.place.imageData = placeImage.image?.pngData()
+        if identifier == "showPlace" {
+            mapVC.place.name = placeName.text!
+            mapVC.place.location = placeLocation.text
+            mapVC.place.type = placeType.text
+            mapVC.place.imageData = placeImage.image?.pngData()
         }
     }
-    
 }
 
-// MARK:- extension MapViewControllerDelegate
-extension NewPlaceTableViewController:MapViewControllerDelegate {
+ //MARK:-  MapViewControllerDelegate
+extension NewPlaceTableViewController: MapViewControllerDelegate {
     func getAddress(_ address: String?) {
         placeLocation.text = address
     }

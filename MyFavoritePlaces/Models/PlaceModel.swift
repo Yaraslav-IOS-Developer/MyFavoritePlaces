@@ -8,6 +8,7 @@
 import RealmSwift
 
 
+
 class Place: Object {
     
     @objc dynamic var name = ""

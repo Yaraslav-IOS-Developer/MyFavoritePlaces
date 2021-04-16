@@ -12,11 +12,11 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // MARK:- Property
     private let searchController = UISearchController(searchResultsController: nil)
-    private var places:  Results<Place>!
-    private var filtreredPlaces: Results<Place>!
+    private var places: Results<Place>!
+    private var filteredPlaces: Results<Place>!
     private var ascendingSorting = true
     private var searchBarIsEmpty: Bool {
-        guard let text  = searchController.searchBar.text else  { return false }
+        guard let text = searchController.searchBar.text else { return false }
         return text.isEmpty
     }
     private var isFiltering: Bool {
@@ -41,7 +41,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     // MARK: - Table view data source
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFiltering {
-            return filtreredPlaces.count
+            return filteredPlaces.count
         } else {
             return places.count
         }
@@ -50,7 +50,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! CustomTableViewCell
         
-        _ = isFiltering ? filtreredPlaces[indexPath.row] : places[indexPath.row]
+        _ = isFiltering ? filteredPlaces[indexPath.row] : places[indexPath.row]
         cell.configureCell(places[indexPath.row])
         return cell
     }
@@ -79,7 +79,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         if segue.identifier == "swoDetails" {
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            let place = isFiltering ? filtreredPlaces[indexPath.row] : places[indexPath.row]
+            let place = isFiltering ? filteredPlaces[indexPath.row] : places[indexPath.row]
             
             let newPlaceVC = segue.destination as! NewPlaceTableViewController
             newPlaceVC.currentPlace = place
@@ -141,7 +141,7 @@ extension MainViewController: UISearchResultsUpdating {
 
     private func filterContentForSearchText(_ searchText: String) {
         
-        filtreredPlaces = places.filter("name CONTAINS[c] %@  OR location CONTAINS[c] %@", searchText, searchText)
+        filteredPlaces = places.filter("name CONTAINS[c] %@  OR location CONTAINS[c] %@", searchText, searchText)
         
         tableView.reloadData()
     }

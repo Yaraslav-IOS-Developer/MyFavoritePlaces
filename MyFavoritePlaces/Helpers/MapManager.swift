@@ -5,19 +5,19 @@
 //  Created by Yaroslav on 24.03.2021.
 //
 
-import Foundation
+
 import UIKit
 import MapKit
 
-
 class MapManager {
+    
     
     // MARK: - Property 
     let locationManager = CLLocationManager()
     
     private var placeCoordinate: CLLocationCoordinate2D?
-    private var  directionArray: [MKDirections] = []
-    private let regionInMeters = 500.00
+    private var directionsArray: [MKDirections] = []
+    private let regionInMeters = 1000.00
     
     // MARK: - Methods
     // Маркер заведения
@@ -32,13 +32,14 @@ class MapManager {
                 print(error)
                 return
             }
+            
             guard let placemarks = placemarks else { return }
+            
             let placemark = placemarks.first
             
             let annotation = MKPointAnnotation()
             annotation.title = place.name
             annotation.subtitle = place.type
-            
             
             guard let placemarkLocation = placemark?.location else { return }
             
@@ -58,31 +59,32 @@ class MapManager {
             checkLocationAuthorization(mapView: mapView, segueIdentifier: segueIdentifier)
             closure()
         } else {
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.showAlert(title: "Location Services are Disabled", message: "To enable it go: Setting -> Privacy -> Location Services and turn On")
+                self.showAlert(
+                    title: "Location Services are Disabled",
+                    message: "To enable it go: Settings -> Privacy -> Location Services and turn On"
+                )
             }
         }
     }
     
-    // Проверка авторизации приложения для использования сервисов гелокации
+    // Проверка авторизации прилоежния для исопользования сервисов геолокации
     func checkLocationAuthorization(mapView: MKMapView, segueIdentifier: String) {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse:
             mapView.showsUserLocation = true
-            if segueIdentifier == "getAddress" { showUserLoaction(mapView: mapView) }
+            if segueIdentifier == "getAddress" { showUserLocation(mapView: mapView) }
             break
         case .denied:
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.showAlert(
-                    title: "Your Location is not Availeble",
-                    message: "To give permission Go to: Setting -> MyFavoritePlaces -> Location"
+                    title: "Your Location is not Available",
+                    message: "To enable your location tracking: Setting -> MyPlaces -> Location"
                 )
             }
             break
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
-            break
         case .restricted:
             break
         case .authorizedAlways:
@@ -92,8 +94,9 @@ class MapManager {
         }
     }
     
-    // Фокус карты на местоположение пользователя
-    func showUserLoaction(mapView: MKMapView) {
+    // Фокус карты на местоположении пользователя
+    func showUserLocation(mapView: MKMapView) {
+        
         if let location = locationManager.location?.coordinate {
             let region = MKCoordinateRegion(center: location,
                                             latitudinalMeters: regionInMeters,
@@ -101,8 +104,10 @@ class MapManager {
             mapView.setRegion(region, animated: true)
         }
     }
+    
     // Строим маршрут от местоположения пользователя до заведения
     func getDirections(for mapView: MKMapView, previousLocation: (CLLocation) -> ()) {
+        
         guard let location = locationManager.location?.coordinate else {
             showAlert(title: "Error", message: "Current location is not found")
             return
@@ -111,22 +116,24 @@ class MapManager {
         locationManager.startUpdatingLocation()
         previousLocation(CLLocation(latitude: location.latitude, longitude: location.longitude))
         
-        guard let requst = createDirectionsRequst(from: location) else {
-            
+        guard let request = createDirectionsRequest(from: location) else {
             showAlert(title: "Error", message: "Destination is not found")
             return
         }
         
-        let direction = MKDirections(request: requst)
-        resetMapView(withNew: direction, mapView: mapView)
+        let directions = MKDirections(request: request)
         
-        direction.calculate { [unowned self](response, error) in
+        resetMapView(withNew: directions, mapView: mapView)
+        
+        directions.calculate { (response, error) in
+            
             if let error = error {
                 print(error)
                 return
             }
+            
             guard let response = response else {
-                self.showAlert(title: "Error", message: "Direction is not available")
+                self.showAlert(title: "Error", message: "Directions are not available")
                 return
             }
             
@@ -134,16 +141,17 @@ class MapManager {
                 mapView.addOverlay(route.polyline)
                 mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
                 
-                let distance = String(format:  "%.1f", route.distance / 1000)
-                _ = route.expectedTravelTime
+                let distance = String(format: "%.1f", route.distance / 1000)
+                let timeInterval = route.expectedTravelTime
                 
-                print("\(distance) km ")
+                print("Расстояние до места: \(distance) км.")
+                print("Время в пути составит: \(timeInterval) сек.")
             }
         }
     }
     
     // Настройка запроса для расчета маршрута
-    func createDirectionsRequst(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request? {
+    func createDirectionsRequest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request? {
         
         guard let destinationCoordinate = placeCoordinate else { return nil }
         let startingLocation = MKPlacemark(coordinate: coordinate)
@@ -160,26 +168,26 @@ class MapManager {
     
     // Меняем отображаемую зону области карты в соответствии с перемещением пользователя
     func startTrackingUserLocation(for mapView: MKMapView, and location: CLLocation?, closure: (_ currentLocation: CLLocation) -> ()) {
-        guard let location = location else { return }
-        let center = getCentrLocation(for: mapView)
-        guard center.distance(from: location) > 50 else { return }
         
+        guard let location = location else { return }
+        let center = getCenterLocation(for: mapView)
+        guard center.distance(from: location) > 50 else { return }
         
         closure(center)
     }
     
-    // Сброс всех ранее построенных марщрутов перед поcтроением нового
+    // Сброс всех ранее построенных маршрутов перед построением нового
     func resetMapView(withNew directions: MKDirections, mapView: MKMapView) {
         
         mapView.removeOverlays(mapView.overlays)
-        directionArray.append(directions)
-        
-        let _ = directionArray.map { $0.cancel() }
-        directionArray.removeAll()
+        directionsArray.append(directions)
+        let _ = directionsArray.map { $0.cancel() }
+        directionsArray.removeAll()
     }
     
-    // Определение центра отоброжения области карты
-    func getCentrLocation(for mapView: MKMapView) -> CLLocation {
+    // Определение центра отображаемой области карты
+    func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+        
         let latitude = mapView.centerCoordinate.latitude
         let longitude = mapView.centerCoordinate.longitude
         
@@ -189,15 +197,31 @@ class MapManager {
     private func showAlert(title: String, message: String) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
         
+        let okAction = UIAlertAction(title: "OK", style: .default)
         alert.addAction(okAction)
-        let alertWimdow = UIWindow(frame: UIScreen.main.bounds)
-        alertWimdow.rootViewController = UIViewController()
-        alertWimdow.windowLevel = UIWindow.Level.alert + 1
-        alertWimdow.makeKeyAndVisible()
-        alertWimdow.rootViewController?.present(alert, animated: true)
+        
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindow.Level.alert + 1
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alert, animated: true, completion: nil)
     }
+    
 }
+    
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindow.Level.alert + 1
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alert, animated: true)
+    }
+
 
 
