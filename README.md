@@ -16,3 +16,5 @@ Used in the project:
 
 
 ## ScreenShots
+<img width="280" alt="TableView" src="https://user-images.githubusercontent.com/46518479/115108331-8c14d700-9f78-11eb-8dd8-6c2bebf9102e.png">  <img width="280" alt="DetailPlace" src="https://user-images.githubusercontent.com/46518479/115108335-96cf6c00-9f78-11eb-983c-61d6c345a3fd.png"> 
+<img width="280" alt="MapView" src="https://user-images.githubusercontent.com/46518479/115108358-b1a1e080-9f78-11eb-879e-2a3f028efc6f.png"> <img width="280" alt="NewPlace" src="https://user-images.githubusercontent.com/46518479/115108384-db5b0780-9f78-11eb-8b61-8557c66c31cc.png">
