@@ -69,7 +69,6 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
         let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction])
-        
         return swipeActions
     }
     
@@ -87,7 +86,6 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     // MARK: - IBAction
     @IBAction private func unwindSegue(_ segue: UIStoryboardSegue) {
         guard let newPlaceVC = segue.source as? NewPlaceTableViewController else { return }
-        
         newPlaceVC.savePlace()
         tableView.reloadData()
     }

@@ -17,12 +17,10 @@ class MapViewController: UIViewController {
     
     // MARK: - Property
     let mapManager = MapManager()
+    let annotationIdentifier = "annotationIdentifier"
     var mapViewControllerDelegate: MapViewControllerDelegate?
     var place = Place()
-    
-    let annotationIdentifier = "annotationIdentifier"
     var incomeSegueIdentifier = ""
-    
     var previousLocation: CLLocation? {
         didSet {
             mapManager.startTrackingUserLocation(
@@ -96,8 +94,7 @@ extension MapViewController: MKMapViewDelegate {
         guard !(annotation is MKUserLocation) else { return nil }
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) as? MKPinAnnotationView
         if annotationView == nil {
-            annotationView = MKPinAnnotationView(annotation: annotation,
-                                                 reuseIdentifier: annotationIdentifier)
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
             annotationView?.canShowCallout = true
         }
         if let imageData = place.imageData {
@@ -111,7 +108,6 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        
         let center = mapManager.getCenterLocation(for: mapView)
         let geocoder = CLGeocoder()
         
@@ -141,6 +137,7 @@ extension MapViewController: MKMapViewDelegate {
             }
         }
     }
+    
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
         renderer.strokeColor = .blue
