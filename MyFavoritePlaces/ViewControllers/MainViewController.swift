@@ -10,7 +10,7 @@ import RealmSwift
 
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    // MARK:- Property
+    // MARK: - Property
     private let searchController = UISearchController(searchResultsController: nil)
     private var places: Results<Place>!
     private var filteredPlaces: Results<Place>!
@@ -24,9 +24,9 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // MARK: - IBOutlet
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
-    @IBOutlet weak var reversedSortingButton: UIBarButtonItem!
+    @IBOutlet weak private var tableView: UITableView!
+    @IBOutlet weak private var  segmentedControl: UISegmentedControl!
+    @IBOutlet weak private var reversedSortingButton: UIBarButtonItem!
     
     // MARK: - viewDidload
     override func viewDidLoad() {
@@ -34,7 +34,10 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         places = realm.objects(Place.self)
         tableView.separatorColor = .clear
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0,
+                                                         y: 0,
+                                                         width: tableView.frame.size.width,
+                                                         height: 1))
         setupSearchController()
     }
     
@@ -64,7 +67,6 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let place = places[indexPath.row]
         let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") {  (contextualAction, view, boolValue) in
-            
             StorageManager.deletObject(place)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
@@ -73,10 +75,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         return swipeActions
     }
     
-    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "swoDetails" {
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
             let place = isFiltering ? filteredPlaces[indexPath.row] : places[indexPath.row]
@@ -87,19 +87,18 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // MARK: - IBAction
-    @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {
-        
+    @IBAction private func unwindSegue(_ segue: UIStoryboardSegue) {
         guard let newPlaceVC = segue.source as? NewPlaceTableViewController else { return }
         
         newPlaceVC.savePlace()
         tableView.reloadData()
     }
     
-    @IBAction func sortSelection(_ sender: UISegmentedControl) {
+    @IBAction private func sortSelection(_ sender: UISegmentedControl) {
         sorting()
     }
-    @IBAction func reversedSorting(_ sender: Any) {
-        
+    
+    @IBAction private func reversedSorting(_ sender: Any) {
         ascendingSorting.toggle()
         
         if ascendingSorting {
@@ -107,7 +106,6 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             reversedSortingButton.image = #imageLiteral(resourceName: "ZA")
         }
-        
         sorting()
     }
     
@@ -121,28 +119,24 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     private func sorting() {
-        
         if segmentedControl.selectedSegmentIndex == 0 {
             places = places.sorted(byKeyPath: "date", ascending: ascendingSorting)
         } else {
             places = places.sorted(byKeyPath: "name", ascending: ascendingSorting)
         }
-        
         tableView.reloadData()
     }
 }
-// MARK: - extension UISearchResultsUpdating
+
+    // MARK: - extension UISearchResultsUpdating
 extension MainViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
-        
         filterContentForSearchText(searchController.searchBar.text!)
     }
-
+    
     private func filterContentForSearchText(_ searchText: String) {
-        
         filteredPlaces = places.filter("name CONTAINS[c] %@  OR location CONTAINS[c] %@", searchText, searchText)
-        
         tableView.reloadData()
     }
 }

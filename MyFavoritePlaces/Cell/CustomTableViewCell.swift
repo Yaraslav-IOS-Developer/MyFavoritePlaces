@@ -10,7 +10,7 @@ import Cosmos
 
 class CustomTableViewCell: UITableViewCell {
     
-    //MARK: - IBOutlet
+    // MARK: - IBOutlet
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var imageOfPlace: UIImageView!
     @IBOutlet weak var shadowImageOfPlaceView: UIView!
@@ -30,19 +30,14 @@ class CustomTableViewCell: UITableViewCell {
         setupImageOfPlace()
     }
     
-
     // MARK: - Methods
     private func setupImageOfPlace() {
-        
         imageOfPlace.layer.cornerRadius = imageOfPlace.frame.size.height / 2
         shadowImageOfPlaceView.layer.cornerRadius = imageOfPlace.frame.size.height / 2
-        
         addShadow(view: shadowImageOfPlaceView, opacity: 0.8, x: 2, y: 3, radius: 6)
-    
     }
     
     private func setupTopView() {
-        
         topView.layer.cornerRadius = 20
         addShadow(view: topView, opacity: 0.4, x: 2, y: 3, radius: 4)
     }
@@ -54,14 +49,11 @@ class CustomTableViewCell: UITableViewCell {
         view.layer.shadowRadius = radius
     }
     
-    
     func configureCell(_ place: Place) {
         nameLabel.text = place.name
         locationLabel.text = place.location
         typeLabel.text = place.type
         imageOfPlace.image = UIImage(data: place.imageData!)
         cosmosView.rating = place.rating
-        
     }
-    
 }

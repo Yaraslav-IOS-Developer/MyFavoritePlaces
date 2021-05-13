@@ -14,15 +14,15 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
     var currentPlace: Place!
     private var imageIsChanged = false
     
-    //MARK: - IBOutlet
-    @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBOutlet weak var placeImage: UIImageView!
-    @IBOutlet weak var placeName: UITextField!
-    @IBOutlet weak var placeLocation: UITextField!
-    @IBOutlet weak var placeType: UITextField!
-    @IBOutlet weak var ratingControlCosmosView: CosmosView!
+    // MARK: - IBOutlet
+    @IBOutlet weak private var saveButton: UIBarButtonItem!
+    @IBOutlet weak private var placeImage: UIImageView!
+    @IBOutlet weak private var placeName: UITextField!
+    @IBOutlet weak private var placeLocation: UITextField!
+    @IBOutlet weak private var placeType: UITextField!
+    @IBOutlet weak private var ratingControlCosmosView: CosmosView!
     
-    // MARK:- vieDidload
+    // MARK: - vieDidload
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,7 +34,6 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
     
     // MARK: - Table view delegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         if indexPath.row == 0 {
             let cameraIcon = #imageLiteral(resourceName: "camera")
             let photoIcon = #imageLiteral(resourceName: "photo")
@@ -45,10 +44,10 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
             
             camera.setValue(cameraIcon, forKey: "image")
             camera.setValue(CATextLayerAlignmentMode.left, forKey: "titleTextAlignment")
-            
             let foto = UIAlertAction(title: "Foto", style: .default) { _ in
                 self.chooseImagePicker(source: .photoLibrary)
             }
+            
             foto.setValue(photoIcon, forKey: "image")
             foto.setValue(CATextLayerAlignmentMode.left, forKey: "titleTextAlignment")
             
@@ -65,11 +64,14 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
         }
     }
     
-    //MARK:- methods
+    // MARK: - methods
     func savePlace() {
         let image = imageIsChanged ? placeImage.image : #imageLiteral(resourceName: "imagePlaceholder")
         let imageData = image?.pngData()
-        let newPlace = Place(name: placeName.text!, location: placeLocation.text, type: placeType.text, imageData: imageData, rating: Double(ratingControlCosmosView.rating))
+        let newPlace = Place(name: placeName.text!,
+                             location: placeLocation.text,
+                             type: placeType.text, imageData: imageData,
+                             rating: Double(ratingControlCosmosView.rating))
         
         if currentPlace != nil {
             try! realm.write {
@@ -85,7 +87,6 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
     }
     
     private func setupEditScreen() {
-        
         if currentPlace != nil {
             setupNavigationBar()
             imageIsChanged  = true
@@ -99,6 +100,7 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
             ratingControlCosmosView.rating = Double(currentPlace.rating)
         }
     }
+    
     private func setupNavigationBar() {
         if let topItem = navigationController?.navigationBar.topItem {
             topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -108,13 +110,13 @@ class NewPlaceTableViewController: UITableViewController, UINavigationController
         saveButton.isEnabled = true
     }
     
-    // MARK:- IBAction
-    @IBAction func cancelAction(_ sender: Any) {
+    // MARK: - IBAction
+    @IBAction private func cancelAction(_ sender: Any) {
         dismiss(animated: true)
     }
 }
 
-// MARK:- Text field delegate
+    // MARK: - Text field delegate
 extension NewPlaceTableViewController: UITextFieldDelegate {
     
     // Скрываем клавиатуру по нажатию на Done
@@ -129,11 +131,10 @@ extension NewPlaceTableViewController: UITextFieldDelegate {
         } else {
             saveButton.isEnabled = false
         }
-        
     }
 }
 
-// MARK: - Work with image
+    // MARK: - Work with image
 extension NewPlaceTableViewController: UIImagePickerControllerDelegate {
     
     func chooseImagePicker(source: UIImagePickerController.SourceType) {
@@ -155,15 +156,13 @@ extension NewPlaceTableViewController: UIImagePickerControllerDelegate {
     }
 }
 
-// MARK: - Navigation
+    // MARK: - Navigation
 extension NewPlaceTableViewController {
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        guard
-            let identifier = segue.identifier,
-            let mapVC = segue.destination as? MapViewController
-            else { return }
+        guard let identifier = segue.identifier,
+              let mapVC = segue.destination as? MapViewController
+        else { return }
         
         mapVC.incomeSegueIdentifier = identifier
         mapVC.mapViewControllerDelegate = self
@@ -177,11 +176,9 @@ extension NewPlaceTableViewController {
     }
 }
 
- //MARK:-  MapViewControllerDelegate
+    // MARK: - MapViewControllerDelegate
 extension NewPlaceTableViewController: MapViewControllerDelegate {
     func getAddress(_ address: String?) {
         placeLocation.text = address
     }
-    
-    
 }
