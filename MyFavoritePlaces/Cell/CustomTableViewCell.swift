@@ -11,13 +11,13 @@ import Cosmos
 class CustomTableViewCell: UITableViewCell {
     
     // MARK: - IBOutlet
-    @IBOutlet weak var topView: UIView!
-    @IBOutlet weak var imageOfPlace: UIImageView!
-    @IBOutlet weak var shadowImageOfPlaceView: UIView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var locationLabel: UILabel!
-    @IBOutlet weak var typeLabel: UILabel!
-    @IBOutlet weak var cosmosView: CosmosView! {
+    @IBOutlet weak private var topView: UIView!
+    @IBOutlet weak private var imageOfPlace: UIImageView!
+    @IBOutlet weak private var shadowImageOfPlaceView: UIView!
+    @IBOutlet weak private var nameLabel: UILabel!
+    @IBOutlet weak private var locationLabel: UILabel!
+    @IBOutlet weak private var typeLabel: UILabel!
+    @IBOutlet weak private var cosmosView: CosmosView! {
         didSet {
             cosmosView.settings.updateOnTouch = false
         }
